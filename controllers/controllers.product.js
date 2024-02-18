@@ -1,4 +1,4 @@
-const Product = require("../models/product.models");
+const Product = require("../models/product.models.js");
 
 const express = require("express");
 const app = express();
@@ -23,7 +23,32 @@ const createProduct = async (req, res, next) => {
   }
 };
 
+const getProductById = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const product = await Product.findOne(productId);
+    res.status(200).json(product);
+  } catch (error) {
+    next(error);
+  }
+};
+const updateProduct = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const product = await Product.findOneAndUpdate(productId, req.body);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    } else {
+      const updatedproduct = await Product.findOne(productId);
+      res.status(200).json(updatedproduct);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   getProduct,
   createProduct,
+  getProductById,
+  updateProduct,
 };

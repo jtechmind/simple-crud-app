@@ -26,7 +26,7 @@ const createProduct = async (req, res, next) => {
 const getProductById = async (req, res, next) => {
   try {
     const { productId } = req.params;
-    const product = await Product.findOne(productId);
+    const product = await Product.find({ _id: productId });
     res.status(200).json(product);
   } catch (error) {
     next(error);
@@ -46,9 +46,24 @@ const updateProduct = async (req, res, next) => {
     next(error);
   }
 };
+
+const deleteProduct = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const deletedProduct = await Product.deleteOne(productId);
+    if (!deletedProduct) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(200).json(deletedProduct);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   getProduct,
   createProduct,
   getProductById,
   updateProduct,
+  deleteProduct,
 };

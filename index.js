@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Product = require("./models/product.models");
 const routes = require("./routes/routes.product.js");
+const connectDB = require("./database/db.js");
 const app = express();
 app.use(express.json());
 
@@ -35,3 +36,5 @@ app.post("/api/v1/products", async (req, res) => {
   }
 });
 app.use("/api/v1/product", routes);
+
+connectDB();
